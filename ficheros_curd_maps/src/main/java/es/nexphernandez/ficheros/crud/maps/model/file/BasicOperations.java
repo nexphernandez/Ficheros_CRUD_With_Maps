@@ -56,10 +56,10 @@ public abstract class BasicOperations {
     }
 
     /**
-     * Funcion que actualiza u
-     * @param empleados
-     * @param file
-     * @return
+     * Funcion que actualiza un fichero mediante una lista de empleados
+     * @param empleados lista de empleados a usar
+     * @param file fichero a actualizar
+     * @return true/false
      */
     public boolean updateFile (Set<Empleado> empleados, File file){
         if (empleados == null ) {
