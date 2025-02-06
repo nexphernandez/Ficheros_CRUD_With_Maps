@@ -30,29 +30,67 @@ public class FileOperations extends BasicOperations implements IOperations {
         }
     }
 
+    /**
+     * Funcion que aniade un empleado al fichero
+     * @param empleado empleado a aniadir
+     * @return true/false;
+     */
     @Override
     public boolean create(Empleado empleado) {
-        if (condition) {
-            
+        if (empleado == null) {
+            return false;
         }
+        Set<Empleado> empleados = read(file);
+        if (empleados.contains(empleado)) {
+            return false;
+        }
+        return create(empleados.toString(), file);
     }
 
+    /**
+     * Funcion que busca un empleado por el identificador en un fichero
+     * @param identificador identificador del empleado a buscar
+     * @return empleado buscado
+     */
     @Override
     public Empleado read(String identificador) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'read'");
+        if (identificador == null || identificador.isEmpty()) {
+            return null;
+        }
+        Empleado empleado = new Empleado(identificador);
+        return read(empleado);
     }
 
+    /**
+     * Funcion que busca un empleado en un fichero
+     * @param empleado empleado a buscar
+     * @return empleado buscado
+     */
     @Override
     public Empleado read(Empleado empleado) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'read'");
+        if (empleado == null) {
+            return empleado;
+        }
+        Set<Empleado> empleados = read(file);
+        for (Empleado empleadoBuscar : empleados) {
+            if (empleadoBuscar.equals(empleado)) {
+                return empleadoBuscar;
+            }
+        }
+        return null;
     }
 
     @Override
     public boolean update(Empleado empleado) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        if (empleado == null) {
+            return false;
+        }
+        Set<Empleado> empleados = read(file);
+        for (Empleado empleadoActualizar : empleados) {
+            if (empleadoActualizar.equals(empleado)) {
+                empleadoActualizar = empleado;
+            }
+        }
     }
 
     @Override

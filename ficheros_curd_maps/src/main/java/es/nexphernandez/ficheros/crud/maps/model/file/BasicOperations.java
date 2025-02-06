@@ -54,4 +54,26 @@ public abstract class BasicOperations {
             return false;
         }
     }
+
+    /**
+     * Funcion que actualiza u
+     * @param empleados
+     * @param file
+     * @return
+     */
+    public boolean updateFile (Set<Empleado> empleados, File file){
+        if (empleados == null ) {
+            return false;
+        }
+        try {
+            file.delete();
+            file.createNewFile();
+        } catch (Exception e) {
+            return false;
+        }
+        for (Empleado empleado : empleados) {
+            create(empleado.toString(), file);
+        }
+        return true;
+    }
 }
