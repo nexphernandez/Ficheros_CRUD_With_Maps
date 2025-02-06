@@ -64,7 +64,7 @@ public class Empleado extends Persona{
         LocalDate fechaActual = LocalDate.now();
         String[] arrayFecha = fechaNacimiento.split("/");
         LocalDate nacimiento = LocalDate.of(Integer.parseInt(arrayFecha[0]), 
-        Integer.parseInt(arrayFecha[1]), Integer.parseInt(arrayFecha[0]));
+        Integer.parseInt(arrayFecha[1]), Integer.parseInt(arrayFecha[2]));
         Period periodo = Period.between(nacimiento, fechaActual);
         return periodo.getYears();
     }

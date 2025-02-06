@@ -7,11 +7,19 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashSet;
 import java.util.Set;
-
+/**
+ * @author nexphernandez
+ * @version 1.0.0
+ */
 import es.nexphernandez.ficheros.crud.maps.model.Empleado;
 
-abstract class BasicOperations {
+public abstract class BasicOperations {
     
+    /**
+     * Funcion que lee los elementos de un fichero
+     * @param file fichero que se debe leer 
+     * @return lista con los datos del fichero
+     */
     public Set<Empleado> read(File file){
         Set<Empleado> empleados = new HashSet<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))){
@@ -28,14 +36,22 @@ abstract class BasicOperations {
         return empleados;
     }
 
+    /**
+     * Funcion que aniade un informacion al fichero
+     * @param data informacion que hay que aniadir al fichero
+     * @param file fichero donde aniadir la informacion 
+     * @return true/false
+     */
     public boolean create (String data, File file){
         if (data == null || data.isEmpty()) {
             return false;
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,true))){
-            
+            writer.write(data);
+            writer.newLine();
+            return true;
         } catch (Exception e) {
-            // TODO: handle exception
+            return false;
         }
     }
 }

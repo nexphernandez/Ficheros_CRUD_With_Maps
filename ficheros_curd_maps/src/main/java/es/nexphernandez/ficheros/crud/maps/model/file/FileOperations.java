@@ -11,7 +11,7 @@ import java.net.URL;
 import es.nexphernandez.ficheros.crud.maps.model.Empleado;
 import es.nexphernandez.ficheros.crud.maps.model.IOperations;
 
-public class FileOperations implements IOperations{
+public class FileOperations extends BasicOperations implements IOperations {
     File file;
     String nombreFichero = "empleado.txt";
     
@@ -32,8 +32,9 @@ public class FileOperations implements IOperations{
 
     @Override
     public boolean create(Empleado empleado) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+        if (condition) {
+            
+        }
     }
 
     @Override
