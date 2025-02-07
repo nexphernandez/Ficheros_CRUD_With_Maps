@@ -2,6 +2,7 @@ package es.nexphernandez.ficheros.crud.maps.model;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author nexphernandez
@@ -62,9 +63,8 @@ public class Empleado extends Persona{
      */
     public int getEdad (String fechaNacimiento){
         LocalDate fechaActual = LocalDate.now();
-        String[] arrayFecha = fechaNacimiento.split("/");
-        LocalDate nacimiento = LocalDate.of(Integer.parseInt(arrayFecha[0]), 
-        Integer.parseInt(arrayFecha[1]), Integer.parseInt(arrayFecha[2]));
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate nacimiento = LocalDate.parse(fechaNacimiento.trim(),dateTimeFormatter);
         Period periodo = Period.between(nacimiento, fechaActual);
         return periodo.getYears();
     }

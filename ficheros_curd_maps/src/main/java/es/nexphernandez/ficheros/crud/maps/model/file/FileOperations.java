@@ -1,9 +1,8 @@
 package es.nexphernandez.ficheros.crud.maps.model.file;
 
-import java.io.File;
+
 import java.util.HashSet;
 import java.util.Set;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -15,22 +14,12 @@ import es.nexphernandez.ficheros.crud.maps.model.Empleado;
 import es.nexphernandez.ficheros.crud.maps.model.IOperations;
 
 public class FileOperations extends BasicOperations implements IOperations {
-    File file;
-    String nombreFichero = "empleado.txt";
     
     /**
      * Constructor de la clase FileOperations
      */
     public FileOperations(){
-        try {
-            URL resourse = getClass().getClassLoader().getResource(this.nombreFichero);
-            this.file = new File(resourse.toURI());
-            if (!file.exists() || file.isFile()) {
-                file.createNewFile();
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException();
-        }
+        super();
     }
 
     /**
@@ -107,7 +96,7 @@ public class FileOperations extends BasicOperations implements IOperations {
         if (!encontrado) {
             return false;
         }
-        return updateFile(actualizados, file);
+        return create(actualizados.toString(), file);
     }
 
     /**
@@ -126,7 +115,7 @@ public class FileOperations extends BasicOperations implements IOperations {
             return false;
         }
         empleados.remove(empleado);
-        return updateFile(empleados,file);
+        return create(empleados.toString(),file);
     }
 
     /**

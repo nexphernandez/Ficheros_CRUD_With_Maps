@@ -8,13 +8,24 @@ import es.nexphernandez.ficheros.crud.maps.model.Empleado;
 
 public class FileOperationsMaps extends FileOperations{
 
-    @Override
-    public boolean create(Empleado empleado) {
+    public FileOperationsMaps(){
+        super();
+    }
+
+    public boolean createMap(Empleado empleado) {
         if (empleado == null || empleado.getIdentificador() == null || empleado.getIdentificador().isEmpty()) {
             return false;
         }
         Map<String, Empleado> empleados = new TreeMap<>();
-        
+        Set<Empleado> setEmpleados = read(file);
+        for (Empleado esEmpleadoBuscar : setEmpleados) {
+            empleados.put(esEmpleadoBuscar.getIdentificador(), esEmpleadoBuscar);
+        }
+        empleados.put(empleado.getIdentificador(), empleado);
+        for (Empleado empleadocrear : empleados.values()) {
+            create(empleadocrear.toString(), file); 
+        }
+        return true;
     }
 
     @Override

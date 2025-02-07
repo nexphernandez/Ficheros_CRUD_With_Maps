@@ -15,6 +15,18 @@ import es.nexphernandez.ficheros.crud.maps.model.Empleado;
 
 public abstract class BasicOperations {
     
+    protected File file;
+    protected String path = "C:\\Users\\nico\\Documents\\Ficheros_CRUD_With_Maps\\ficheros_curd_maps\\src\\main\\resources\\archivo.txt";
+
+    /**
+     * Constructor por defecto
+     */
+    public BasicOperations(){
+        file = new File(path);
+        if (!file.exists() || !file.isFile()) {
+            throw new IllegalArgumentException("El recurso no es de tipo fichero "+path);
+        }
+    }
     /**
      * Funcion que lee los elementos de un fichero
      * @param file fichero que se debe leer 
@@ -47,6 +59,8 @@ public abstract class BasicOperations {
             return false;
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,true))){
+            file.delete();
+            file.createNewFile();
             writer.write(data);
             writer.newLine();
             return true;
@@ -59,7 +73,7 @@ public abstract class BasicOperations {
      * Funcion que actualiza un fichero mediante una lista de empleados
      * @param empleados lista de empleados a usar
      * @param file fichero a actualizar
-     * @return true/false
+     * @return true
      */
     public boolean updateFile (Set<Empleado> empleados, File file){
         if (empleados == null ) {
