@@ -77,7 +77,7 @@ public abstract class Persona {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(identificador, nombre);
+        return Objects.hash(identificador);
     }
 
     /**
@@ -85,7 +85,7 @@ public abstract class Persona {
      */
     @Override
     public String toString() {
-        return getIdentificador() + ", " + getNombre() + ", " + getFechaNacimiento();
+        return getIdentificador() + "," + getNombre() + "," + getFechaNacimiento();
     }
     
 }

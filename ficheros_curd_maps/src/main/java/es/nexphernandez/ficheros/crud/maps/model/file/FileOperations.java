@@ -3,6 +3,7 @@ package es.nexphernandez.ficheros.crud.maps.model.file;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -29,14 +30,14 @@ public class FileOperations extends BasicOperations implements IOperations {
      */
     @Override
     public boolean create(Empleado empleado) {
-        if (empleado == null) {
+        if (empleado == null || empleado.getIdentificador() == null || empleado.getIdentificador().isEmpty()) {
             return false;
         }
-        Set<Empleado> empleados = read(file);
+        Set<Empleado> empleados = read(super.file);
         if (empleados.contains(empleado)) {
             return false;
         }
-        return create(empleados.toString(), file);
+        return create(empleado.toString(), super.file);
     }
 
     /**
@@ -60,10 +61,10 @@ public class FileOperations extends BasicOperations implements IOperations {
      */
     @Override
     public Empleado read(Empleado empleado) {
-        if (empleado == null) {
+        if (empleado == null || empleado.getIdentificador() == null || empleado.getIdentificador().isEmpty()) {
             return empleado;
         }
-        Set<Empleado> empleados = read(file);
+        Set<Empleado> empleados = read(super.file);
         for (Empleado empleadoBuscar : empleados) {
             if (empleadoBuscar.equals(empleado)) {
                 return empleadoBuscar;
@@ -79,10 +80,10 @@ public class FileOperations extends BasicOperations implements IOperations {
      */
     @Override
     public boolean update(Empleado empleado) {
-        if (empleado == null) {
+        if (empleado == null || empleado.getIdentificador().isEmpty() || empleado.getIdentificador() == null) {
             return false;
         }
-        Set<Empleado> empleados = read(file);
+        Set<Empleado> empleados = read(super.file);
         boolean encontrado = false;
         Set<Empleado> actualizados = new HashSet<>();
         for (Empleado empleadoActualizar : empleados) {
@@ -96,7 +97,29 @@ public class FileOperations extends BasicOperations implements IOperations {
         if (!encontrado) {
             return false;
         }
-        return create(actualizados.toString(), file);
+        return updateFile(actualizados, super.file);
+    }
+
+    /**
+     * Funcion que actualiza un fichero mediante una lista de empleados
+     * @param empleados lista de empleados a usar
+     * @param file fichero a actualizar
+     * @return true
+     */
+    public boolean updateFile (Set<Empleado> empleados, File file){
+        if (empleados == null ) {
+            return false;
+        }
+        try {
+            file.delete();
+            file.createNewFile();
+        } catch (Exception e) {
+            return false;
+        }
+        for (Empleado empleado : empleados) {
+            create(empleado);
+        }
+        return true;
     }
 
     /**
@@ -110,12 +133,17 @@ public class FileOperations extends BasicOperations implements IOperations {
             return false;
         }
         Empleado empleado = new Empleado(identificador);
-        Set<Empleado> empleados = read(file);
+        Set<Empleado> empleados = read(super.file);
         if (!empleados.contains(empleado)) {
             return false;
         }
-        empleados.remove(empleado);
-        return create(empleados.toString(),file);
+        for (Empleado empleadoDelete : empleados) {
+            if (empleadoDelete.equals(empleado)) {
+                empleados.remove(empleadoDelete);
+                return updateFile(empleados, super.file);
+            }
+        }
+        return false;
     }
 
     /**
@@ -128,7 +156,7 @@ public class FileOperations extends BasicOperations implements IOperations {
         if (puesto == null || puesto.isEmpty()) {
             return new HashSet<>();
         }
-        Set<Empleado>empleados = read(file);
+        Set<Empleado>empleados = read(super.file);
         Set<Empleado> porPuestos = new HashSet<>();
         for (Empleado empleado : empleados) {
             if (empleado.getPuesto().trim().equals(puesto.trim())) {
@@ -154,7 +182,7 @@ public class FileOperations extends BasicOperations implements IOperations {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate inicio = LocalDate.parse(fechaInicio, formato);
         LocalDate fin = LocalDate.parse(fechaFin, formato);
-        Set<Empleado> empleados = read(file);
+        Set<Empleado> empleados = read(super.file);
         Set<Empleado> porEdad = new HashSet<>();
         for (Empleado empleado : empleados) {
             LocalDate cumpleanio = LocalDate.parse(empleado.getFechaNacimiento().trim(), formato);

@@ -74,8 +74,8 @@ public class Empleado extends Persona{
      */
     @Override
     public String toString() {
-        return getIdentificador() + ", " + getNombre() + ", " + getPuesto() +
-         ", " + getSalario() + ", " + getFechaNacimiento(); 
+        return getIdentificador() + "," + getNombre() + "," + getPuesto() +
+         "," + getSalario() + "," + getFechaNacimiento(); 
     }
 
 }

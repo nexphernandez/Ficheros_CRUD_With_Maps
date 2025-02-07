@@ -33,6 +33,9 @@ public abstract class BasicOperations {
      * @return lista con los datos del fichero
      */
     public Set<Empleado> read(File file){
+        if(file == null){
+            return new HashSet<>();
+        }
         Set<Empleado> empleados = new HashSet<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))){
             String line;
@@ -59,8 +62,6 @@ public abstract class BasicOperations {
             return false;
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,true))){
-            file.delete();
-            file.createNewFile();
             writer.write(data);
             writer.newLine();
             return true;
@@ -69,25 +70,4 @@ public abstract class BasicOperations {
         }
     }
 
-    /**
-     * Funcion que actualiza un fichero mediante una lista de empleados
-     * @param empleados lista de empleados a usar
-     * @param file fichero a actualizar
-     * @return true
-     */
-    public boolean updateFile (Set<Empleado> empleados, File file){
-        if (empleados == null ) {
-            return false;
-        }
-        try {
-            file.delete();
-            file.createNewFile();
-        } catch (Exception e) {
-            return false;
-        }
-        for (Empleado empleado : empleados) {
-            create(empleado.toString(), file);
-        }
-        return true;
-    }
 }

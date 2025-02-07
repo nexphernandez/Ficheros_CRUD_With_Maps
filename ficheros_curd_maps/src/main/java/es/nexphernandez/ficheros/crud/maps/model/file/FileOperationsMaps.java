@@ -1,67 +1,104 @@
 package es.nexphernandez.ficheros.crud.maps.model.file;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
+/**
+ *@author nexphernandez
+ *@version 1.0.0 
+ */
 import es.nexphernandez.ficheros.crud.maps.model.Empleado;
 
-public class FileOperationsMaps extends FileOperations{
+public class FileOperationsMaps extends FileOperations {
 
+    /**
+     * Constructor vacio
+     */
     public FileOperationsMaps(){
         super();
     }
 
-    public boolean createMap(Empleado empleado) {
+    /**
+     * Funcion que agrega elementos al fichero ordenado
+     * @param empleado empleado a agregar
+     * @return true/false
+     */
+    @Override
+    public boolean create(Empleado empleado) {
         if (empleado == null || empleado.getIdentificador() == null || empleado.getIdentificador().isEmpty()) {
             return false;
         }
         Map<String, Empleado> empleados = new TreeMap<>();
         Set<Empleado> setEmpleados = read(file);
+        if (setEmpleados.contains(empleado)) {
+            return false;
+        }
+        
         for (Empleado esEmpleadoBuscar : setEmpleados) {
             empleados.put(esEmpleadoBuscar.getIdentificador(), esEmpleadoBuscar);
         }
         empleados.put(empleado.getIdentificador(), empleado);
+        file.delete();
+        try {
+            file.createNewFile();
+    
+        } catch (Exception e) {
+            throw new IllegalArgumentException();
+        }        
         for (Empleado empleadocrear : empleados.values()) {
             create(empleadocrear.toString(), file); 
         }
         return true;
     }
-
-    @Override
-    public Empleado read(String identificador) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'read'");
+    
+    /**
+     * Funcion que actualiza un fichero mediante una lista de empleados
+     * @param empleados lista de empleados a usar
+     * @param file fichero a actualizar
+     * @return true
+     */
+    public boolean updateFile (Map<String,Empleado> empleados, File file){
+        if (empleados == null ) {
+            return false;
+        }
+        try {
+            file.delete();
+            file.createNewFile();
+        } catch (Exception e) {
+            return false;
+        }
+        for (Empleado empleado : empleados.values()) {
+            create(empleado);
+        }
+        return true;
     }
 
-    @Override
-    public Empleado read(Empleado empleado) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'read'");
-    }
-
+    /**
+     * Funcion que actuliza un empleado de un fichero
+     * @param empleado empleado a actualizar
+     * @return true/false
+     */
     @Override
     public boolean update(Empleado empleado) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
-    }
-
-    @Override
-    public boolean delete(String identificador) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
-    }
-
-    @Override
-    public Set<Empleado> empleadosPorPuesto(String puesto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'empleadosPorPuesto'");
-    }
-
-    @Override
-    public Set<Empleado> empleadosPorEdad(String fechaInicio, String fechaFin) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'empleadosPorEdad'");
+        if (empleado == null || empleado.getIdentificador().isEmpty() || empleado.getIdentificador() == null) {
+            return false;
+        }
+        Set<Empleado> empleados = read(super.file);
+        boolean encontrado = false;
+        Map<String,Empleado> actualizados = new TreeMap<>();
+        for (Empleado empleadoActualizar : empleados) {
+            if (empleadoActualizar.equals(empleado)) {
+                actualizados.put(empleado.getIdentificador(), empleado);
+                encontrado = true;
+            } else{
+                actualizados.put(empleadoActualizar.getIdentificador(), empleadoActualizar);
+            }
+        }
+        if (!encontrado) {
+            return false;
+        }
+        return updateFile(actualizados, super.file);
     }
     
 }
